@@ -2,6 +2,7 @@ import { useState } from "react";
 import { MemoryDraftCard } from "../components/MemoryDraftCard";
 import { MemoryItemConfirmTable } from "../components/MemoryItemConfirmTable";
 import { MockNoticeBanner } from "../components/MockNoticeBanner";
+import { UnknownElderState } from "../components/UnknownElderState";
 import { createMemoryDraft } from "../lib/mockBackendAdapter";
 import {
   chenMemorySample,
@@ -25,13 +26,20 @@ const sourceOptions: Array<{ value: MemorySourceType; label: string }> = [
 
 export const MemoryIntakePage = ({ elderId }: MemoryIntakePageProps) => {
   const { state, dispatch } = useDemo();
-  const profile = state.profiles[elderId] ?? state.profiles.E001;
-  const draft = state.memoryDraftsByElderId[profile.elderId];
-  const savedMemory = state.initialCareMemoryByElderId[profile.elderId];
   const [sourceType, setSourceType] = useState<MemorySourceType>("family_oral");
   const [input, setInput] = useState(chenMemorySample);
   const [loading, setLoading] = useState(false);
-  const [saved, setSaved] = useState(Boolean(savedMemory));
+  const [saved, setSaved] = useState(false);
+  const profile = state.profiles[elderId];
+  if (!profile) {
+    return (
+      <div className="page">
+        <UnknownElderState elderId={elderId} />
+      </div>
+    );
+  }
+  const draft = state.memoryDraftsByElderId[profile.elderId];
+  const savedMemory = state.initialCareMemoryByElderId[profile.elderId];
 
   const generateDraft = async () => {
     setLoading(true);
@@ -55,13 +63,20 @@ export const MemoryIntakePage = ({ elderId }: MemoryIntakePageProps) => {
         </a>
       </header>
 
-      <MockNoticeBanner>当前为前端 Mock AI 提取，不调用真实 QwenPaw，不保存真实病历。</MockNoticeBanner>
+      <MockNoticeBanner>
+        請勿粘貼真實病歷、身份證明、電話、地址、Apple Health 原始資料或真實長者敏感資料；當前僅用於示例演示。
+        Mock extractor 不會調用真實 QwenPaw / LLM。AI 生成的記憶草稿必須人工確認。本內容不構成醫療診斷。
+      </MockNoticeBanner>
 
       <section className="panel memory-intake-form">
         <div className="section-title">
           <span>输入区</span>
           <h2>粘贴历史资料</h2>
         </div>
+        <p className="trace-disclaimer">
+          請勿粘貼真實病歷、身份證明、電話、地址、Apple Health 原始資料或真實長者敏感資料；當前僅用於示例演示。
+          Mock extractor 不會調用真實 QwenPaw / LLM，AI 生成的記憶草稿必須人工確認，本內容不構成醫療診斷。
+        </p>
         <label>
           <span>资料来源</span>
           <select value={sourceType} onChange={(event) => setSourceType(event.target.value as MemorySourceType)}>
@@ -101,7 +116,7 @@ export const MemoryIntakePage = ({ elderId }: MemoryIntakePageProps) => {
             >
               保存到老人初始照护记忆
             </button>
-            {saved ? (
+            {saved || savedMemory ? (
               <p className="trace-disclaimer">
                 已保存。返回驾驶舱后会显示：初始照护记忆已建立、动态状态基线建立中，以及高血压关注、跌倒风险关注、晚药易漏、粤语优先、夜间离床关注等标签。
               </p>

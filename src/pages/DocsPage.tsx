@@ -1,4 +1,5 @@
 import { MedicalDisclaimer } from "../components/MedicalDisclaimer";
+import { MockNoticeBanner } from "../components/MockNoticeBanner";
 
 export const DocsPage = () => (
   <div className="page docs-page">
@@ -9,6 +10,25 @@ export const DocsPage = () => (
         <p>评委和团队成员可在这里快速理解 Demo 剧本、数据、规则和后续扩展。</p>
       </div>
     </header>
+
+    <MockNoticeBanner>
+      CareBand Agent Demo v0.2 是前端 Mock 落地驗證版：不接真實後端、不接真實硬件、不接真實 QwenPaw API、不接真實 Apple Health / Health Connect / Fitbit / Zepp。
+    </MockNoticeBanner>
+
+    <section className="panel docs-section">
+      <h2>3 分鐘演示路徑</h2>
+      <ol className="demo-path-steps demo-path-steps--docs" aria-label="3 分鐘演示路徑">
+        <li>機構端總覽：查看多位長者狀態、設備狀態、數據完整度。</li>
+        <li>進入陳伯 E001 駕駛艙：查看初始照護記憶、五維狀態、7 日趨勢。</li>
+        <li>導入歷史資料：Mock 生成初始照護記憶草稿並人工確認。</li>
+        <li>導入穿戴示例：CSV / Mock 生成 DailySnapshot。</li>
+        <li>觸發事件：頭暈語音、SOS、跌倒、設備未佩戴或離開安全區。</li>
+        <li>查看 Agent Trace：Request / Response / fallback。</li>
+        <li>護工端處理任務，家屬端查看安心表達。</li>
+        <li>隱私授權頁與試點計劃頁展示資料邊界和場景驗證路徑。</li>
+      </ol>
+      <p className="muted-copy">其他模擬器頁面可作為 Q&A 展開，不必全部放入主路演。</p>
+    </section>
 
     <section className="panel docs-section">
       <h2>Demo v0.2 已展示什么</h2>
@@ -43,8 +63,8 @@ export const DocsPage = () => (
       <p>
         Demo 使用 ElderProfile、ElderProfileDetail、ConsentStatus、ContactPerson、
         PersonalBaseline、DailySnapshot、MedicationPlan、MedicationDose、CareEvent、
-        RiskResult、CareTask 和 AgentRoleSummaries 组织数据。v0.1.3 新增老人档案页和
-        用药计划页，并保持 careLoopStatus / displayStatus 与 riskLevel 分层。
+        RiskResult、CareTask 和 AgentRoleSummaries 组织数据。v0.2 保持老人档案页、
+        用药计划页、照护记忆、穿戴导入和模拟硬件事件的 frontend-only Mock 链路。
       </p>
     </section>
 
@@ -100,7 +120,7 @@ Mock AI Agent 生成三端摘要
     <section className="panel docs-section">
       <h2>后续接入 QwenPaw / 硬件</h2>
       <p>
-        陈伯驾驶舱已加入 Mock QwenPaw Agent IO 面板。后续可将 riskEngine 输出、事件摘要和老人基线发送给 QwenPaw 生成真实多角色摘要；
+        陈伯驾驶舱已加入 Mock QwenPaw Agent IO 面板。后续可将 riskEngine 输出、事件摘要和老人基线作为 QwenPaw-compatible 输入，由未来 Agent 生成多角色摘要；
         硬件侧计划通过原型传感器模块或手环式原型，将心率趋势、步数、睡眠参考、
         佩戴时间、安全区状态和 SOS 事件映射为 DailySnapshot 与 CareEvent。
       </p>

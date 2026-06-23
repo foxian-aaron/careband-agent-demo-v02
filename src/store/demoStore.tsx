@@ -26,6 +26,7 @@ import { mockWeeklySummaries } from "../data/mockWeeklySummaries";
 import { generateAgentSummaries } from "../lib/agentFormatter";
 import { buildAgentTrace } from "../lib/agentTrace";
 import { deriveCareLoopStatus, deriveDisplayStatus } from "../lib/displayStatus";
+import { demoStorageKey } from "../lib/demoReset";
 import { calculateRisk } from "../lib/riskEngine";
 import { latestWearableSnapshot } from "../lib/wearableImport";
 import {
@@ -63,7 +64,6 @@ import type {
   WeeklySummary,
 } from "../types";
 
-const storageKey = "careband-agent-demo-state-v0.2";
 const chenId = "E001";
 
 export interface DemoState {
@@ -1280,7 +1280,7 @@ export const demoReducer = (state: DemoState, action: DemoAction): DemoState => 
 
 const loadInitialState = () => {
   if (typeof window === "undefined") return createInitialDemoState();
-  const saved = window.localStorage.getItem(storageKey);
+  const saved = window.localStorage.getItem(demoStorageKey);
   if (!saved) return createInitialDemoState();
   try {
     const parsed = JSON.parse(saved) as Partial<DemoState>;
@@ -1320,7 +1320,7 @@ export const DemoProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(demoReducer, undefined, loadInitialState);
 
   useEffect(() => {
-    window.localStorage.setItem(storageKey, JSON.stringify(state));
+    window.localStorage.setItem(demoStorageKey, JSON.stringify(state));
   }, [state]);
 
   const value = useMemo(() => ({ state, dispatch }), [state]);

@@ -14,6 +14,7 @@ import {
   riskLabels,
   taskStatusLabels,
 } from "../lib/statusLabels";
+import { confirmAndResetLocalDemoState } from "../lib/demoReset";
 
 interface DemoControlPanelProps {
   state: DemoState;
@@ -88,6 +89,9 @@ export const DemoControlPanel = ({ state, dispatch }: DemoControlPanelProps) => 
 
   return (
     <section className="demo-control">
+      <div className="global-mock-banner demo-target-banner">
+        目前操作對象：陳伯 E001。以下事件僅改變本瀏覽器中的前端 Mock 狀態。
+      </div>
       <div className="control-status">
         <div>
           <span>当前 Demo 阶段</span>
@@ -112,88 +116,90 @@ export const DemoControlPanel = ({ state, dispatch }: DemoControlPanelProps) => 
         </div>
       </div>
       <div className="control-buttons">
-        <button onClick={() => dispatch({ type: "RESET_DEMO" })}>重置 Demo</button>
+        <button onClick={() => confirmAndResetLocalDemoState(dispatch)}>
+          重置本地 Demo / 清除本地缓存
+        </button>
         <button
           className="primary"
           disabled={!canTriggerDizziness}
           title={canTriggerDizziness ? "触发语音主诉并创建高优先级任务" : "本轮头晕事件已触发"}
           onClick={() => dispatch({ type: "TRIGGER_CHEN_DIZZINESS" })}
         >
-          触发陈伯头晕语音事件
+          触发陳伯 E001 頭暈語音
         </button>
         <button
           disabled={!canAccept}
           title={canAccept ? "接单后任务进入处理中" : "需要先触发任务，或当前任务已接单"}
           onClick={() => dispatch({ type: "CAREGIVER_ACCEPT_TASK" })}
         >
-          护工接单
+          陳伯 E001 護工接單
         </button>
         <button
           disabled={!canMarkViewed}
           title={canMarkViewed ? "记录护工到场查看" : "护工接单后才能标记已查看"}
           onClick={() => dispatch({ type: "CAREGIVER_MARK_VIEWED" })}
         >
-          标记已查看
+          標記已查看陳伯 E001
         </button>
         <button
           disabled={!canConfirmMedication}
           title={canConfirmMedication ? "确认晚药状态" : "标记已查看后才能确认晚药"}
           onClick={() => dispatch({ type: "CONFIRM_EVENING_MEDICATION" })}
         >
-          确认晚药
+          確認陳伯 E001 晚藥
         </button>
         <button
           disabled={!canComplete}
           title={canComplete ? "完成并写入护工备注" : "确认晚药后才能完成处理"}
           onClick={() => dispatch({ type: "COMPLETE_CARE_TASK" })}
         >
-          完成护工处理
+          完成陳伯 E001 護工任務
         </button>
         <button onClick={() => dispatch({ type: "TRIGGER_SOS" })}>
-          触发 SOS 测试
+          觸發陳伯 E001 SOS
         </button>
         <button onClick={() => dispatch({ type: "SIMULATE_DATA_GAP" })}>
-          模拟数据不足
+          模擬陳伯 E001 數據不足
         </button>
         <a className="text-button" href={`#/elder/${chenId}/memory-intake`}>
-          导入历史资料
+          導入陳伯 E001 歷史資料
         </a>
         <a className="text-button" href={`#/elder/${chenId}/wearable-import`}>
-          导入穿戴数据
+          導入陳伯 E001 穿戴數據
         </a>
         <button
           onClick={() =>
             dispatch({ type: "TRIGGER_HARDWARE_EVENT", elderId: chenId, eventType: "sos_long_press" })
           }
         >
-          长按 SOS
+          長按陳伯 E001 SOS
         </button>
         <button
           onClick={() =>
             dispatch({ type: "TRIGGER_HARDWARE_EVENT", elderId: chenId, eventType: "fall_detected" })
           }
         >
-          模拟跌倒
+          模擬陳伯 E001 跌倒
         </button>
         <button
           onClick={() =>
             dispatch({ type: "TRIGGER_HARDWARE_EVENT", elderId: chenId, eventType: "no_response_after_fall" })
           }
         >
-          模拟无回应
+          模擬陳伯 E001 無回應
         </button>
         <button
           onClick={() =>
             dispatch({ type: "TRIGGER_HARDWARE_EVENT", elderId: chenId, eventType: "device_not_worn" })
           }
         >
-          模拟设备未佩戴
+          模擬陳伯 E001 設備未佩戴
         </button>
         <button onClick={() => dispatch({ type: "SIMULATE_GEOFENCE_EXIT", elderId: chenId })}>
-          模拟离开安全区
+          模擬陳伯 E001 離開安全區
         </button>
         <button onClick={() => dispatch({ type: "SIMULATE_AGENT_FAILURE", elderId: chenId })}>
-          模拟 Agent 失败
+          模擬陳伯 E001 Agent 失敗
         </button>
         <button
           onClick={() =>
@@ -203,7 +209,7 @@ export const DemoControlPanel = ({ state, dispatch }: DemoControlPanelProps) => 
             })
           }
         >
-          模拟 Agent fallback
+          模擬陳伯 E001 Agent fallback
         </button>
         <button
           onClick={() =>
@@ -226,7 +232,7 @@ export const DemoControlPanel = ({ state, dispatch }: DemoControlPanelProps) => 
             })
           }
         >
-          生成周报
+          生成陳伯 E001 周報
         </button>
       </div>
       <div className="panel">

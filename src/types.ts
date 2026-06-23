@@ -319,7 +319,9 @@ export interface InitialCareMemory {
 
 export type WearableDataSource =
   | "Mock Data"
+  | "Mock wearable sample"
   | "CSV"
+  | "CSV 示例數據"
   | "Apple Health"
   | "Android Health Connect"
   | "Fitbit"

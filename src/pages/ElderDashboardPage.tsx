@@ -11,6 +11,7 @@ import { RiskBadge } from "../components/RiskBadge";
 import { StatusPill } from "../components/StatusPill";
 import { Timeline } from "../components/Timeline";
 import { TrendMiniChart } from "../components/TrendMiniChart";
+import { UnknownElderState } from "../components/UnknownElderState";
 import { WearableDataSourceBadge } from "../components/WearableDataSourceBadge";
 import { WeeklyTrendSummary } from "../components/WeeklyTrendSummary";
 import { formatDateTime } from "../lib/dateUtils";
@@ -47,7 +48,14 @@ const metricTone = (deviation: number | null) => {
 
 export const ElderDashboardPage = ({ elderId }: ElderDashboardPageProps) => {
   const { state } = useDemo();
-  const profile = state.profiles[elderId] ?? state.profiles.E001;
+  const profile = state.profiles[elderId];
+  if (!profile) {
+    return (
+      <div className="page">
+        <UnknownElderState elderId={elderId} />
+      </div>
+    );
+  }
   const baseline = state.baselines[profile.elderId];
   const snapshot = state.snapshots[profile.elderId];
   const risk = getRiskForElder(state, profile.elderId);

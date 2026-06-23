@@ -9,9 +9,10 @@ export const WearableDataSourceBadge = ({ source = "Mock Data" }: WearableDataSo
   const future = ["Apple Health", "Android Health Connect", "Fitbit", "Zepp / Amazfit"].includes(
     source,
   );
+  const suffix = future ? "（Future Integration · 未接入真實服務）" : "（Mock only）";
   return (
     <StatusPill
-      label={`${source}${future ? "（未来接入）" : "（模拟）"}`}
+      label={`${source}${suffix}`}
       tone={future ? "observation" : "stable"}
     />
   );

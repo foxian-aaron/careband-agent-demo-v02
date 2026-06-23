@@ -20,35 +20,37 @@ const getCurrentPath = () => {
   return path || "/institution";
 };
 
+const getRouteElderId = (path: string) => decodeURIComponent(path.split("/")[2] ?? "");
+
 const renderRoute = (path: string) => {
   if (path === "/institution") return <InstitutionPage />;
   if (path === "/caregiver") return <CaregiverPage />;
   if (path.startsWith("/elder/") && path.endsWith("/memory-intake")) {
-    return <MemoryIntakePage elderId={path.split("/")[2] || "E001"} />;
+    return <MemoryIntakePage elderId={getRouteElderId(path)} />;
   }
   if (path.startsWith("/memory-intake/")) {
-    return <MemoryIntakePage elderId={path.split("/")[2] || "E001"} />;
+    return <MemoryIntakePage elderId={getRouteElderId(path)} />;
   }
   if (path.startsWith("/elder/") && path.endsWith("/wearable-import")) {
-    return <WearableImportPage elderId={path.split("/")[2] || "E001"} />;
+    return <WearableImportPage elderId={getRouteElderId(path)} />;
   }
   if (path.startsWith("/wearable-import/")) {
-    return <WearableImportPage elderId={path.split("/")[2] || "E001"} />;
+    return <WearableImportPage elderId={getRouteElderId(path)} />;
   }
   if (path.startsWith("/elder/") && path.endsWith("/profile")) {
-    return <ElderProfilePage elderId={path.split("/")[2] || "E001"} />;
+    return <ElderProfilePage elderId={getRouteElderId(path)} />;
   }
   if (path.startsWith("/elder/") && path.endsWith("/privacy")) {
-    return <ConsentPrivacyPage elderId={path.split("/")[2] || "E001"} />;
+    return <ConsentPrivacyPage elderId={getRouteElderId(path)} />;
   }
   if (path.startsWith("/elder/")) {
-    return <ElderDashboardPage elderId={path.split("/")[2] || "E001"} />;
+    return <ElderDashboardPage elderId={getRouteElderId(path)} />;
   }
   if (path.startsWith("/medication/")) {
-    return <MedicationPage elderId={path.split("/")[2] || "E001"} />;
+    return <MedicationPage elderId={getRouteElderId(path)} />;
   }
   if (path.startsWith("/family/")) {
-    return <FamilyPage elderId={path.split("/")[2] || "E001"} />;
+    return <FamilyPage elderId={getRouteElderId(path)} />;
   }
   if (path === "/demo-control") return <DemoControlPage />;
   if (path === "/hardware-simulator") return <HardwareSimulatorPage />;

@@ -20,7 +20,7 @@ const files = [
 const readProjectFile = (file: string) =>
   readFileSync(new URL(`../../${file}`, import.meta.url), "utf8");
 
-describe("content safety for v0.1.3 additions", () => {
+describe("content safety for v0.2 public mock demo", () => {
   it("does not add disallowed hardware wording", () => {
     const content = files.map(readProjectFile).join("\n");
     const disallowedHardwarePattern = new RegExp(

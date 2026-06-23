@@ -128,6 +128,21 @@ export const InstitutionPage = () => {
         </a>
       </header>
 
+      <section className="panel demo-path-card">
+        <div className="section-title">
+          <span>3 分鐘演示路徑</span>
+          <h2>主線故事：資料進入系統到三端閉環</h2>
+        </div>
+        <ol className="demo-path-steps" aria-label="3 分鐘演示路徑">
+          <li>機構端總覽：查看多位長者狀態、設備狀態、數據完整度。</li>
+          <li>進入陳伯 E001 駕駛艙：查看初始照護記憶、五維狀態、7 日趨勢。</li>
+          <li>導入歷史資料與穿戴示例：Mock 生成照護記憶與 DailySnapshot。</li>
+          <li>觸發事件：頭暈語音、SOS、跌倒、設備未佩戴或離開安全區。</li>
+          <li>查看 Agent Trace、護工任務、家屬安心表達、隱私授權與試點計劃。</li>
+        </ol>
+        <p className="muted-copy">其他模擬器頁面可作為 Q&A 展開，不必全部放入主路演。</p>
+      </section>
+
       <section className="stats-grid">
         <article>
           <span>当前未闭环高风险</span>

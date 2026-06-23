@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { DataQualityBadge } from "../components/DataQualityBadge";
 import { MockNoticeBanner } from "../components/MockNoticeBanner";
+import { UnknownElderState } from "../components/UnknownElderState";
 import { WearableDataSourceBadge } from "../components/WearableDataSourceBadge";
 import { importWearableData } from "../lib/mockBackendAdapter";
 import {
@@ -15,24 +16,44 @@ interface WearableImportPageProps {
   elderId: string;
 }
 
-const sources: WearableDataSource[] = [
-  "Mock Data",
+const activeSources: Array<{ label: string; value: WearableDataSource }> = [
+  { label: "Mock Data", value: "Mock wearable sample" },
+  { label: "CSV 示例數據 / CSV Sample", value: "CSV 示例數據" },
+];
+
+const futureSources = [
   "Apple Health",
   "Android Health Connect",
   "Fitbit",
   "Zepp / Amazfit",
-  "CSV",
-];
+] as const;
+
+export const isFutureWearableSource = (source: WearableDataSource) =>
+  (futureSources as readonly string[]).includes(source);
 
 export const WearableImportPage = ({ elderId }: WearableImportPageProps) => {
   const { state, dispatch } = useDemo();
-  const profile = state.profiles[elderId] ?? state.profiles.E001;
-  const [source, setSource] = useState<WearableDataSource>("CSV");
+  const [source, setSource] = useState<WearableDataSource>("CSV 示例數據");
   const [csv, setCsv] = useState(wearableCsvExample);
   const [loading, setLoading] = useState(false);
+  const [futureNotice, setFutureNotice] = useState("");
+  const profile = state.profiles[elderId];
+  if (!profile) {
+    return (
+      <div className="page">
+        <UnknownElderState elderId={elderId} />
+      </div>
+    );
+  }
   const latestImport = state.wearableImports[profile.elderId]?.[0];
 
   const runImport = async (csvText: string, dataSource: WearableDataSource) => {
+    if (isFutureWearableSource(dataSource)) {
+      setFutureNotice(
+        "此來源目前僅展示未來接入點。v0.2 公網版不會讀取真實穿戴資料。不會調用真實 Apple Health / Health Connect / Fitbit / Zepp API。",
+      );
+      return;
+    }
     const snapshots = parseWearableCsv(profile.elderId, csvText, dataSource);
     if (!snapshots.length) return;
     setLoading(true);
@@ -59,7 +80,9 @@ export const WearableImportPage = ({ elderId }: WearableImportPageProps) => {
         </a>
       </header>
 
-      <MockNoticeBanner>当前为模拟导入，后续可替换为 Apple Health / Health Connect / Fitbit / Zepp API。</MockNoticeBanner>
+      <MockNoticeBanner>
+        当前为模拟导入，v0.2 公網版不會讀取真實穿戴資料；Apple Health / Health Connect / Fitbit / Zepp 僅展示 Future Integration。
+      </MockNoticeBanner>
 
       <section className="panel wearable-import-form">
         <div className="section-title">
@@ -67,28 +90,48 @@ export const WearableImportPage = ({ elderId }: WearableImportPageProps) => {
           <h2>选择导入通道</h2>
         </div>
         <div className="source-grid">
-          {sources.map((item) => (
+          {activeSources.map((item) => (
             <button
-              className={source === item ? "active" : ""}
+              className={source === item.value ? "active" : ""}
+              key={item.value}
+              onClick={() => {
+                setSource(item.value);
+                setFutureNotice("");
+              }}
+            >
+              {item.label}
+              <small>Mock only</small>
+            </button>
+          ))}
+          {futureSources.map((item) => (
+            <button
+              className="future-source"
               key={item}
-              onClick={() => setSource(item)}
+              type="button"
+              onClick={() =>
+                setFutureNotice(
+                  "此來源目前僅展示未來接入點。v0.2 公網版不會讀取真實穿戴資料。不會調用真實 Apple Health / Health Connect / Fitbit / Zepp API。",
+                )
+              }
             >
               {item}
-              {item !== "Mock Data" && item !== "CSV" ? "（未来接入）" : ""}
+              <small>Future Integration · 當前未接入真實服務</small>
             </button>
           ))}
         </div>
+        {futureNotice ? <p className="trace-disclaimer">{futureNotice}</p> : null}
         <WearableDataSourceBadge source={source} />
         <textarea value={csv} onChange={(event) => setCsv(event.target.value)} />
         <div className="button-row">
           <button className="primary" disabled={loading} onClick={() => runImport(csv, source)}>
-            {loading ? "导入中..." : "导入 CSV 数据（Mock）"}
+            {loading ? "导入中..." : "导入示例数据（Mock）"}
           </button>
           <button
             onClick={() => {
-              setSource("CSV");
+              setSource("CSV 示例數據");
               setCsv(chenWearableSevenDayCsv);
-              void runImport(chenWearableSevenDayCsv, "CSV");
+              setFutureNotice("");
+              void runImport(chenWearableSevenDayCsv, "CSV 示例數據");
             }}
           >
             导入陈伯 7 天穿戴示例数据

@@ -1,6 +1,7 @@
 import { FamilyPeaceCard } from "../components/FamilyPeaceCard";
 import { MedicalDisclaimer } from "../components/MedicalDisclaimer";
 import { MockNoticeBanner } from "../components/MockNoticeBanner";
+import { UnknownElderState } from "../components/UnknownElderState";
 import { deriveCareLoopStatus, deriveDisplayStatus } from "../lib/displayStatus";
 import { buildFamilyStatusMessage } from "../lib/familyCopy";
 import {
@@ -16,7 +17,14 @@ interface FamilyPageProps {
 
 export const FamilyPage = ({ elderId }: FamilyPageProps) => {
   const { state } = useDemo();
-  const profile = state.profiles[elderId] ?? state.profiles.E001;
+  const profile = state.profiles[elderId];
+  if (!profile) {
+    return (
+      <div className="page family-page">
+        <UnknownElderState elderId={elderId} />
+      </div>
+    );
+  }
   const snapshot = state.snapshots[profile.elderId];
   const risk = getRiskForElder(state, profile.elderId);
   const task = getActiveTaskForElder(state, profile.elderId);

@@ -5,6 +5,6 @@ interface MockNoticeBannerProps {
 export const MockNoticeBanner = ({ children }: MockNoticeBannerProps) => (
   <div className="mock-notice">
     {children ??
-      "当前为前端模拟数据 / Mock 流程，后续可替换为真实后端、QwenPaw Agent 或穿戴设备接入。"}
+      "当前为前端模拟数据 / Mock 流程；当前不接真实后端、QwenPaw 或穿戴服务，仅展示 Future Integration / API Contract。"}
   </div>
 );

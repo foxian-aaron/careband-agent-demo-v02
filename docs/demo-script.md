@@ -1,4 +1,4 @@
-# 智护环 CareBand Agent Demo v0.1.3 路演脚本
+# 智护环 CareBand Agent Demo v0.2 路演脚本
 
 ## 1. 开场介绍
 

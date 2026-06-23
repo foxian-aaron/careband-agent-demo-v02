@@ -4,6 +4,7 @@ import { MedicationPlanTable } from "../components/medication/MedicationPlanTabl
 import { MedicationSummaryCard } from "../components/medication/MedicationSummaryCard";
 import { MedicationTimeline } from "../components/medication/MedicationTimeline";
 import { TrendMiniChart } from "../components/TrendMiniChart";
+import { UnknownElderState } from "../components/UnknownElderState";
 import { deriveCareLoopStatus, deriveDisplayStatus } from "../lib/displayStatus";
 import {
   getEveningMedicationDose,
@@ -24,7 +25,14 @@ interface MedicationPageProps {
 
 export const MedicationPage = ({ elderId }: MedicationPageProps) => {
   const { state, dispatch } = useDemo();
-  const profile = state.profiles[elderId] ?? state.profiles.E001;
+  const profile = state.profiles[elderId];
+  if (!profile) {
+    return (
+      <div className="page">
+        <UnknownElderState elderId={elderId} />
+      </div>
+    );
+  }
   const plan = getMedicationPlanForElder(profile.elderId, state);
   const doses = getMedicationDosesForElder(profile.elderId, state);
   const summary = getTodayMedicationSummary(profile.elderId, state);

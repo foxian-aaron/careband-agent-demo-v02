@@ -57,11 +57,19 @@ export const AgentTracePanel = ({ elderId }: AgentTracePanelProps) => {
           </button>
         </div>
       </div>
-      <MockNoticeBanner>当前为 Mock Agent，后续可替换为 QwenPaw / LLM；医疗边界由规则层和摘要层同时展示。</MockNoticeBanner>
+      <MockNoticeBanner>
+        当前为 Mock Agent；QwenPaw 是 future-compatible integration point，當前未接入真實 QwenPaw API。
+        本結果僅為照護風險提示，不構成醫療診斷。
+      </MockNoticeBanner>
+      <p className="trace-disclaimer">
+        Trace 面板為開發 / 評審演示視圖；真實產品中會先脫敏原始語音、病歷、位置與設備 payload，家屬端不會看到完整 Agent Request。
+      </p>
       <div className="tag-row">
         <FutureIntegrationBadge label={trace.status === "failed" ? "Mock Agent Failed" : "Mock Agent"} />
-        <FutureIntegrationBadge label="Future QwenPaw Integration" />
-        <FutureIntegrationBadge label="JSON Schema Validated" />
+        <FutureIntegrationBadge label="QwenPaw-compatible endpoint planned" />
+        <FutureIntegrationBadge label="Future Integration" />
+        <FutureIntegrationBadge label="API Contract" />
+        <FutureIntegrationBadge label="Frontend simulation" />
         <FutureIntegrationBadge label="Fallback Ready" />
       </div>
       {trace.status === "failed" ? (
@@ -81,10 +89,12 @@ export const AgentTracePanel = ({ elderId }: AgentTracePanelProps) => {
           <p>{trace.response.institution_summary}</p>
         </article>
       </div>
-      <p className="trace-disclaimer">{trace.response.safety_disclaimer}</p>
+      <p className="trace-disclaimer">
+        本結果僅為照護風險提示，不構成醫療診斷。{trace.response.safety_disclaimer}
+      </p>
       <div className="agent-io-grid">
         <details open>
-          <summary>Agent Request</summary>
+          <summary>Agent Request · Demo trace sample / would be redacted in production</summary>
           <pre>{JSON.stringify(trace.request, null, 2)}</pre>
         </details>
         <details open>

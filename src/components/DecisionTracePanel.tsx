@@ -85,7 +85,7 @@ export const DecisionTracePanel = ({
         </article>
         <article>
           <h3>3. 触发规则</h3>
-          <ul>
+          <ul className="decision-rule-list">
             {risk.triggeredRules.map((rule) => (
               <li key={rule}>{rule}</li>
             ))}
@@ -97,9 +97,9 @@ export const DecisionTracePanel = ({
             <div><dt>riskLevel</dt><dd>{risk.riskLevel} · {riskLabels[risk.riskLevel]}</dd></div>
             <div><dt>riskScore</dt><dd>{risk.riskScore}</dd></div>
             <div><dt>confidence</dt><dd>{Math.round(risk.confidence * 100)}%</dd></div>
-            <div><dt>recommendedAction</dt><dd>{risk.recommendedAction}</dd></div>
+            <div className="decision-action-row"><dt>recommendedAction</dt><dd>{risk.recommendedAction}</dd></div>
           </dl>
-          <ul>
+          <ul className="decision-reason-list">
             {risk.keyReasons.map((reason) => (
               <li key={reason}>{reason}</li>
             ))}

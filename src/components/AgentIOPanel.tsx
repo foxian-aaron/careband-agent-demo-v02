@@ -34,8 +34,8 @@ export const AgentIOPanel = ({
         <h2>结构化输入 / 多角色输出</h2>
       </div>
       <p className="muted-copy">
-        当前版本使用 Mock Agent 输出。后续接入 QwenPaw 时，可将下方结构化
-        request 发送给 QwenPaw Agent，由真实 Agent 生成多角色摘要和任务建议。
+        当前版本使用 Mock Agent 输出，不接真實 QwenPaw API。下方仅展示 QwenPaw-compatible
+        request / response contract，未来接入前需完成脱敏、授权和人工确认流程。
       </p>
       <div className="agent-io-grid">
         <div>

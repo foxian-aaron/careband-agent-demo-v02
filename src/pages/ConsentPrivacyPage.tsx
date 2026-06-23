@@ -1,5 +1,6 @@
 import { MockNoticeBanner } from "../components/MockNoticeBanner";
 import { StatusPill } from "../components/StatusPill";
+import { UnknownElderState } from "../components/UnknownElderState";
 import { useDemo } from "../store/demoStore";
 import type { ConsentPrivacyRecord } from "../types";
 
@@ -34,21 +35,31 @@ const Toggle = ({
   </label>
 );
 
-export const ConsentPrivacyPage = ({ elderId = "E001" }: ConsentPrivacyPageProps) => {
+export const ConsentPrivacyPage = ({ elderId }: ConsentPrivacyPageProps) => {
   const { state, dispatch } = useDemo();
-  const profile = state.profiles[elderId] ?? state.profiles.E001;
-  const consent = state.consentRecords[profile.elderId];
+  const profile = elderId ? state.profiles[elderId] : undefined;
+  if (elderId && !profile) {
+    return (
+      <div className="page docs-page">
+        <UnknownElderState elderId={elderId} />
+      </div>
+    );
+  }
+  const consent = profile ? state.consentRecords[profile.elderId] : undefined;
   const update = (
     field: keyof Omit<ConsentPrivacyRecord, "elderId" | "updatedAt">,
     value: boolean | ConsentPrivacyRecord["rawMedicalRecordRetention"],
-  ) => dispatch({ type: "UPDATE_CONSENT", elderId: profile.elderId, field, value });
+  ) => {
+    if (!profile) return;
+    dispatch({ type: "UPDATE_CONSENT", elderId: profile.elderId, field, value });
+  };
 
   return (
     <div className="page docs-page">
       <header className="page-header">
         <div>
           <span>授权与隐私 / Consent & Privacy</span>
-          <h1>{profile.name}数据边界</h1>
+          <h1>{profile ? `${profile.name} 數據邊界` : "前端 Mock Demo 數據邊界"}</h1>
           <p>展示健康数据、历史资料、语音摘要、位置区域和角色权限如何被限制。</p>
         </div>
       </header>
@@ -85,18 +96,30 @@ export const ConsentPrivacyPage = ({ elderId = "E001" }: ConsentPrivacyPageProps
         </div>
       </section>
       <section className="two-column">
-        <article className="panel">
-          <div className="section-title">
-            <span>模拟授权开关</span>
-            <h2>当前 consent record</h2>
-          </div>
-          <div className="toggle-stack">
-            <Toggle label="家属可看趋势" checked={consent.familyCanViewTrend} onChange={(value) => update("familyCanViewTrend", value)} />
-            <Toggle label="护工可看任务" checked={consent.caregiverCanViewTasks} onChange={(value) => update("caregiverCanViewTasks", value)} />
-            <Toggle label="机构可看风险热力图" checked={consent.institutionCanViewRiskHeatmap} onChange={(value) => update("institutionCanViewRiskHeatmap", value)} />
-            <Toggle label="医生可看就诊摘要（默认关闭）" checked={consent.doctorCanViewVisitSummary} onChange={(value) => update("doctorCanViewVisitSummary", value)} />
-          </div>
-        </article>
+        {profile && consent ? (
+          <article className="panel">
+            <div className="section-title">
+              <span>模拟授权开关</span>
+              <h2>当前 consent record</h2>
+            </div>
+            <div className="toggle-stack">
+              <Toggle label="家属可看趋势" checked={consent.familyCanViewTrend} onChange={(value) => update("familyCanViewTrend", value)} />
+              <Toggle label="护工可看任务" checked={consent.caregiverCanViewTasks} onChange={(value) => update("caregiverCanViewTasks", value)} />
+              <Toggle label="机构可看风险热力图" checked={consent.institutionCanViewRiskHeatmap} onChange={(value) => update("institutionCanViewRiskHeatmap", value)} />
+              <Toggle label="医生可看就诊摘要（默认关闭）" checked={consent.doctorCanViewVisitSummary} onChange={(value) => update("doctorCanViewVisitSummary", value)} />
+            </div>
+          </article>
+        ) : (
+          <article className="panel">
+            <div className="section-title">
+              <span>全局隱私邊界</span>
+              <h2>未選擇特定長者</h2>
+            </div>
+            <p className="muted-copy">
+              此頁展示 Demo v0.2 的角色可見範圍與資料邊界；若要查看個案授權開關，請從長者駕駛艙進入個案隱私頁。
+            </p>
+          </article>
+        )}
         <article className="panel">
           <div className="section-title">
             <span>重要声明</span>

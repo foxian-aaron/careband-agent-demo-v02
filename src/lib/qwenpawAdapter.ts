@@ -43,7 +43,7 @@ export const mapMockSummariesToAgentResponse = (
 ): AgentResponse => ({
   summary: String(summaries[summary]),
   decisionTrace: summaries.decisionTrace,
-  modelName: "mock-agent-v0.1.1",
+  modelName: "mock-agent-v0.2",
   generatedAt: new Date().toISOString(),
 });
 
